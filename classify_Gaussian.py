@@ -1,8 +1,8 @@
 # *-* coding=utf-8 *-*
 # !/usr/bin/python
 '''
-	classify_all_channel
-	所有通道全部作为训练数据和测试数据
+    classify_all_channel
+    所有通道全部作为训练数据和测试数据
 '''
 
 import numpy as np
@@ -10,7 +10,7 @@ import os
 import sys
 import time
 import data_load
-import classifier
+import classifier_Gaussian
 from preprocess import data_preprocess, data_normalize
 # from data_plot import plot_result
 
@@ -108,8 +108,8 @@ if __name__ == '__main__':
     z_scores = [True]
     for z_score in z_scores:
         for action_num in actions:
-            # train_dataset_feature_intra( train_dir, subject_list, feature_type,
-            #             input_dir, fold_pre, z_score, channel_pos_list, action_num, chan_num)
+            train_dataset_feature_intra( train_dir, subject_list, feature_type,
+                        input_dir, fold_pre, z_score, channel_pos_list, action_num, chan_num)
 
             train_dataset_feature_inter(train_dir, subject_list, feature_type,
                 input_dir, fold_pre, z_score, channel_pos_list, action_num, chan_num)

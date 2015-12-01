@@ -94,7 +94,6 @@ def training_lda_TD4_intra(my_clfs, trains, classes, **kw):
         scores_1289 = np.zeros((iteration,))
         iteration -= 1
         for train_idx, test_idx in kf:
-
             
             # print '------iteration: ', str(5-iteration)
             train_idx_all = np.array([], np.int)
@@ -114,7 +113,7 @@ def training_lda_TD4_intra(my_clfs, trains, classes, **kw):
             # proportion is 1.1
             # X_train, X_test, y_train, y_test = sklearn.cross_validation.train_test_split(trains, classes, test_size=0.2, random_state=random.randrange(1,51))
             trains_noise_1, classes_noise_1 = proportion_simu(
-                X_train, y_train, 0.9)
+                X_train, y_train, 1.1)
             scores = clf.fit(trains_noise_1, classes_noise_1).score(
                 X_test, y_test)
             scores_1_1[iteration] = scores.mean()
@@ -122,7 +121,7 @@ def training_lda_TD4_intra(my_clfs, trains, classes, **kw):
             # proportion is 1.2
             # X_train, X_test, y_train, y_test = sklearn.cross_validation.train_test_split(trains, classes, test_size=0.2, random_state=random.randrange(1,51))
             trains_noise_2, classes_noise_2 = proportion_simu(
-                X_train, y_train, 0.8)
+                X_train, y_train, 1.2)
             scores = clf.fit(trains_noise_2, classes_noise_2).score(
                 X_test, y_test)
             scores_1_2[iteration] = scores.mean()
@@ -201,6 +200,7 @@ def training_lda_TD4_intra(my_clfs, trains, classes, **kw):
         results.append(['feat_TD4', 'lda', channel_pos, '0.8+0.9', np.mean(scores_0_89), np.std(scores_0_89)])
         results.append(['feat_TD4', 'lda', channel_pos, '1.1', np.mean(scores_1_1), np.std(scores_1_1)])
         results.append(['feat_TD4', 'lda', channel_pos, '1.2', np.mean(scores_1_2), np.std(scores_1_2)])
+        results.append(['feat_TD4', 'lda', channel_pos, '1.1+1.2', np.mean(scores_1_12), np.std(scores_1_12)])
         results.append(['feat_TD4', 'lda', channel_pos, '1.1+0.9', np.mean(scores_19), np.std(scores_19)])
         results.append(['feat_TD4', 'lda', channel_pos,'1.1+0.9+1.2+0.8', np.mean(scores_1289), np.std(scores_1289)])
         
@@ -271,7 +271,7 @@ def training_lda_TD4_inter(my_clfs, trains, tests, classes, **kw):
                 # proportion is 1.1
                 # X_train, X_test, y_train, y_test = sklearn.cross_validation.train_test_split(trains, classes, test_size=0.2, random_state=random.randrange(1,51))
                 trains_noise_1, classes_noise_1 = proportion_simu(
-                    X_train, y_train, 0.9)
+                    X_train, y_train, 1.1)
                 scores = clf.fit(trains_noise_1, classes_noise_1).score(
                     X_test, y_test)
                 scores_1_1[iteration] = scores.mean()
@@ -279,7 +279,7 @@ def training_lda_TD4_inter(my_clfs, trains, tests, classes, **kw):
                 # proportion is 1.2
                 # X_train, X_test, y_train, y_test = sklearn.cross_validation.train_test_split(trains, classes, test_size=0.2, random_state=random.randrange(1,51))
                 trains_noise_2, classes_noise_2 = proportion_simu(
-                    X_train, y_train, 0.8)
+                    X_train, y_train, 1.2)
                 scores = clf.fit(trains_noise_2, classes_noise_2).score(
                     X_test, y_test)
                 scores_1_2[iteration] = scores.mean()
@@ -346,6 +346,7 @@ def training_lda_TD4_inter(my_clfs, trains, tests, classes, **kw):
             results.append(['feat_TD4', 'lda', channel_pos, '0.8+0.9', np.mean(scores_0_89), np.std(scores_0_89)])
             results.append(['feat_TD4', 'lda', channel_pos, '1.1', np.mean(scores_1_1), np.std(scores_1_1)])
             results.append(['feat_TD4', 'lda', channel_pos, '1.2', np.mean(scores_1_2), np.std(scores_1_2)])
+            results.append(['feat_TD4', 'lda', channel_pos, '1.1+1.2', np.mean(scores_1_12), np.std(scores_1_12)])
             results.append(['feat_TD4', 'lda', channel_pos, '1.1+0.9', np.mean(scores_19), np.std(scores_19)])
             results.append(['feat_TD4', 'lda', channel_pos, '1.1+0.9+1.2+0.8', np.mean(scores_1289), np.std(scores_1289)])
 

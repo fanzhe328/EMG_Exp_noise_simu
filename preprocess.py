@@ -12,7 +12,7 @@ from sklearn import preprocessing
 root_path = os.getcwd()
 
 def data_trainsform(data):
-    idx_S0 = np.array([17, 19, 45, 47]) - 1
+    idx_S0 = np.array([17, 20, 45, 45]) - 1
     chan_num = len(idx_S0)
     res = np.zeros( (data.shape[0], 36) )       # 4*9=36, 9表示电极位置的九种情况：原点，上1cm，上2cm，下1cm，下2cm...
     
@@ -50,9 +50,7 @@ def load_raw_dataset(dir='data1', subject='subject_1', action_num=11):
     dir_train = root_path + '/../' + dir
     # 原始文件名称，已经截取动作片， dir表示实验组名称，subject表示受试者
     mat_file = dir_train + '/' + subject + '.mat'
-
     data = sio.loadmat(mat_file)
-    sys.exit(0)
     classes = data['motions']
     if action_num == 7:
         # 选取7个动作，FPG，KG，FP，WF，WE，HC，NM
@@ -81,6 +79,7 @@ def load_raw_dataset(dir='data1', subject='subject_1', action_num=11):
     # print trains.shape
     # sys.exit(0)
     # trains = trains[class_idx,:,:]
+
     return trains
 
 
@@ -103,7 +102,7 @@ def generate_signal_dataset(dir='train1', subject='subject_1'):
     trains_ylim = 0
     for fi in diss:
         data = np.load(fi)
-        print 'fi:', fi, ' :', data.shape
+        # print 'fi:', fi, ' :', data.shape
         target_num = int(
             re.match(subject + '_signal_class_(\d+)\.npy', fi).group(1))
         if trains_ylim == 0:
@@ -125,7 +124,7 @@ def generate_signal_dataset(dir='train1', subject='subject_1'):
 
 def generate_feature_dataset(dir='train1', subject='subject_1', feature_type='TD4', action_num=11):
     ''' 读取特征数据集，并生成特征数组和类别数组 '''
-    print "----generate_feature_dataset, ", dir, subject
+    print "--------generate_feature_dataset, ", dir, ' subject: ', subject, ' action_num: ', action_num
     dir_train = root_path + '/' + dir
     dis = os.listdir(dir_train)
     os.chdir(dir_train)
@@ -152,9 +151,7 @@ def generate_feature_dataset(dir='train1', subject='subject_1', feature_type='TD
         target_num = int(
             re.match(match_template, fi).group(1))
         if target_num>action_num:
-            print 'Drop ', target_num
             continue
-        print 'Add ', target_num
         # target_num = (int)target_num
         # print type(target_num)
         if trains_ylim == 0:
@@ -171,7 +168,7 @@ def generate_feature_dataset(dir='train1', subject='subject_1', feature_type='TD
                # trains, fmt="%s", delimiter=",")  # 保存数据
     # np.savetxt(file_path + '_feat_'+feature_type +'_classes_1-'+str(action_num)+'.csv',
                # targets, fmt="%s", delimiter=",")  # 保存数据
-    print '----Save success, dir', dir, ', subject:', subject
+    print '--------Save success, dir', dir, ', subject:', subject
 
 
 def generate_samples(raw_data, target, window, overlap, sample_rate, subject="subject_1", out_dir='train1'):
@@ -263,11 +260,11 @@ def data_preprocess(input_dir='data1', train_dir='train1', feature_type='TD4', s
     for sub in subject_list:
         print "----Running ", sub, '....................'
         # 加载原始数据
-        trains = load_raw_dataset(input_dir, sub, action_num)
-        # 提取特征
-        for i in range(len(trains)):                # 动作的数量
-            feature_extract(trains[i], i + 1, winsize, incsize,     #提取第i个动作的特征
-                            samrate, feature_type, train_dir, sub, feat_num)
+        # trains = load_raw_dataset(input_dir, sub, action_num)
+        # # 提取特征
+        # for i in range(len(trains)):                # 动作的数量
+        #     feature_extract(trains[i], i + 1, winsize, incsize,     #提取第i个动作的特征
+        #                     samrate, feature_type, train_dir, sub, feat_num)
         # 生成特征文件
         generate_feature_dataset(train_dir, sub, feature_type, action_num)
 
@@ -285,21 +282,22 @@ if __name__ == '__main__':
     
     feature_type = 'TD4'
     feat_num = 4
-    action_num = 11
+    # action_num = 11
 
     # feature_type = 'TD5'
     # feat_num = 5
-    
+
+    actions = [7,9,11]
+    # actions = [11]
+
     subject_list = ['subject_' + str(i) for i in range(1, 6)]
-    
+        
     winsize = 250
     incsize = 100
     samrate=1024
 
     train_dir = train_dir+'_'+str(winsize)+'_'+str(incsize)
-    data_preprocess(input_dir, train_dir, feature_type, subject_list,
-                    winsize, incsize, samrate, feat_num, action_num)
+    for action_num in actions:
+        data_preprocess(input_dir, train_dir, feature_type, subject_list,
+                        winsize, incsize, samrate, feat_num, action_num)
 
-    # feature_type = 'TD5'
-    # data_preprocess(input_dir, train_dir, feature_type, subject_list,
-    #                 winsize, incsize, samrate)
