@@ -10,9 +10,9 @@ import os
 import sys
 import time
 import data_load
-from import training_lda_TD4_inter, training_lda_TD4_intra
+from classifier_proportional_test1 import training_lda_TD4_inter, training_lda_TD4_intra
 from preprocess import data_preprocess, data_normalize
-from result_integrate import result_integrate_intra, result_integrate_inter
+from result_integrate_test1 import result_integrate_intra, result_integrate_inter
 # from data_plot import plot_result
 
 
@@ -97,7 +97,7 @@ if __name__ == '__main__':
     feature_type = 'TD4'
 
     actions = [7, 9, 11]
-
+    # actions = [7]
     train_dir = 'train4_' + fold_pre
     input_dir = 'data4'
     chan_num = 4

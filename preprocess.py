@@ -111,7 +111,7 @@ def generate_signal_dataset(dir='train1', subject='subject_1'):
         np.multiply(target_temp, target_num, target_temp)
         trains = np.concatenate((trains, data), axis=None)
         targets = np.concatenate((targets, target_temp), axis=None)
-    print type(targets)
+    # print type(targets)
     trains = trains.reshape((-1, trains_ylim))
     file_path = root_path + '/' + dir + '/' + subject
     np.save(file_path + '_signal_trains.npy', trains)
